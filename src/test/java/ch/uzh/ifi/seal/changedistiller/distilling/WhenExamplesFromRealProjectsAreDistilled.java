@@ -35,7 +35,6 @@ import org.junit.Test;
 
 import ch.uzh.ifi.seal.changedistiller.ChangeDistiller;
 import ch.uzh.ifi.seal.changedistiller.ChangeDistiller.Language;
-import ch.uzh.ifi.seal.changedistiller.ast.InvalidSyntaxException;
 import ch.uzh.ifi.seal.changedistiller.model.classifiers.java.JavaEntityType;
 import ch.uzh.ifi.seal.changedistiller.model.entities.Insert;
 import ch.uzh.ifi.seal.changedistiller.model.entities.SourceCodeChange;
@@ -217,11 +216,23 @@ public class WhenExamplesFromRealProjectsAreDistilled {
     		fail("Should be Insert but was " + singleChange.getClass());
     	}
     }
+	
     @Test
     public void fileDistillerShouldParseJava14() {
         File left = CompilationUtils.getFile(TEST_DATA + "32/jEditLeft.java");
         File right = CompilationUtils.getFile(TEST_DATA + "32/jEditRight.java");
         distiller.extractClassifiedSourceCodeChanges(left, "1.4", right, "1.4");
         assertThat(distiller.getSourceCodeChanges().size(), greaterThan(0)); 	
+    }
+	   
+    @Test
+    public void testMyExample() {
+        File left = CompilationUtils.getFile(TEST_DATA + "myexample/Example1.java");
+        File right = CompilationUtils.getFile(TEST_DATA + "myexample/Example2.java");
+        distiller.extractClassifiedSourceCodeChanges(left, "1.8", right, "1.8");
+        
+        List<SourceCodeChange> sourceCodeChanges = distiller.getSourceCodeChanges();
+        
+        assertThat(sourceCodeChanges.size(), greaterThan(0));
     }
 }

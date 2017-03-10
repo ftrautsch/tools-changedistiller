@@ -108,9 +108,9 @@ public final class JavaCompilationUtils {
     private static CompilerOptions getDefaultCompilerOptions() {
         CompilerOptions options = new CompilerOptions();
         options.docCommentSupport = true;
-        options.complianceLevel = ClassFileConstants.JDK1_6;
-        options.sourceLevel = ClassFileConstants.JDK1_6;
-        options.targetJDK = ClassFileConstants.JDK1_6;
+        options.complianceLevel = ClassFileConstants.JDK1_8;
+        options.sourceLevel = ClassFileConstants.JDK1_8;
+        options.targetJDK = ClassFileConstants.JDK1_8;
         return options;
     }
 

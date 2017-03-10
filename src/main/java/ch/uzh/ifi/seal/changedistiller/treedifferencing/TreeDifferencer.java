@@ -299,18 +299,24 @@ public class TreeDifferencer {
          * //2. if (node == y.getFirstChild() && node.isInOrder()) { return 0; }
          */
 
-        // 2. If x is the leftmost child of y that is marked "in order" return 1
+        // 2. If x is the leftmost child of y that is marked "in order" return 0.
+    	// If it's not the leftmost, then return its ordinal number within the set of 
+    	// "in order" children.
         // 3. Find v in T2 where v is the rightmost sibling of x that is to the
         // left of x and is marked "in order"
         // combining both steps
+    	
+    	int n = 0;
+    	
         Node v = (Node) node.getPreviousSibling();
         while ((v != null) && !v.isInOrder()) {
             v = (Node) v.getPreviousSibling();
+            n++;
         }
 
-        // x is the leftmost child of y that is marked "in order"
+        // x is the n-th child of y that is marked "in order"
         if (v == null) {
-            return 0;
+            return n;
         }
 
         // 4. Let u be the partner of v in T1 (*)
@@ -331,7 +337,7 @@ public class TreeDifferencer {
             }
         }
 
-        return count + 1;
+        return count + n + 1;
     }
 
     private HashSet<NodePair> longestCommonSubsequence(List<Node> left, List<Node> right) {
