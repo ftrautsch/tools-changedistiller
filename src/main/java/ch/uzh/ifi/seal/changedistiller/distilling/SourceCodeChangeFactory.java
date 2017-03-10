@@ -53,7 +53,7 @@ public class SourceCodeChangeFactory {
     public Insert createInsertOperation(StructureEntityVersion structureEntity, InsertOperation insert) {
         if (isUsableForChangeExtraction(insert.getNodeToInsert())) {
             SourceCodeEntity parent = insert.getParentNode().getEntity();
-            return new Insert(structureEntity, insert.getNodeToInsert().getEntity(), parent);
+            return new Insert(structureEntity, insert.getNodeToInsert().getEntity(), parent, insert.getPosition());
         }
         return null;
     }

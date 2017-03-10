@@ -25,7 +25,6 @@ import static ch.uzh.ifi.seal.changedistiller.model.classifiers.SignificanceLeve
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import ch.uzh.ifi.seal.changedistiller.model.classifiers.ChangeType;
 import ch.uzh.ifi.seal.changedistiller.model.classifiers.SignificanceLevel;
 
 /**
@@ -45,29 +44,8 @@ import ch.uzh.ifi.seal.changedistiller.model.classifiers.SignificanceLevel;
  * @see SourceCodeChange
  */
 public class Insert extends SourceCodeChange {
-
-    /**
-     * Creates a new insert operation.
-     * <p>
-     * The inserted entity is inserted as a child of parent entity inside the structure entity.
-     * 
-     * @param changeType
-     *            the change type
-     * @param rootEntity
-     *            the root entity
-     * @param insertedEntity
-     *            the inserted entity
-     * @param parentEntity
-     *            the parent entity
-     */
-    public Insert(
-            ChangeType changeType,
-            StructureEntityVersion rootEntity,
-            SourceCodeEntity insertedEntity,
-            SourceCodeEntity parentEntity) {
-        this(rootEntity, insertedEntity, parentEntity);
-        setChangeType(changeType);
-    }
+	
+	private int fPosition = -1;
 
     /**
      * Creates a new insert operation.
@@ -81,6 +59,31 @@ public class Insert extends SourceCodeChange {
      */
     public Insert(StructureEntityVersion rootEntity, SourceCodeEntity insertedEntity, SourceCodeEntity parentEntity) {
         super(insertedEntity, parentEntity, rootEntity);
+    }
+    
+    /**
+     * Creates a new insert operation.
+     * 
+     * @param insertedEntity
+     *            the inserted entity
+     * @param parentEntity
+     *            the parent entity
+     * @param rootEntity
+     *            the root entity
+     * @param position
+     *            the position of insertedEntity relatively to its siblings
+     */
+    public Insert(StructureEntityVersion rootEntity, SourceCodeEntity insertedEntity, SourceCodeEntity parentEntity, int position) {
+        super(insertedEntity, parentEntity, rootEntity);
+        setPosition(position);
+    }
+    
+    public int getPosition() {
+    	return fPosition;
+    }
+    
+    public final void setPosition(int position) {
+    	fPosition = position;
     }
 
     @Override

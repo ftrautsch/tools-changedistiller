@@ -69,6 +69,10 @@ public class InsertOperation implements TreeEditOperation {
     public Node getParentNode() {
         return fParent;
     }
+    
+    public int getPosition() {
+    	return fPosition;
+    }
 
     @Override
     public OperationType getOperationType() {

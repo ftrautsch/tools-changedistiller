@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Set;
 
 import ch.uzh.ifi.seal.changedistiller.model.classifiers.EntityType;
+import ch.uzh.ifi.seal.changedistiller.model.entities.SourceCodeEntity;
 import ch.uzh.ifi.seal.changedistiller.treedifferencing.matching.MatchingFactory;
 import ch.uzh.ifi.seal.changedistiller.treedifferencing.matching.measure.TokenBasedCalculator;
 import ch.uzh.ifi.seal.changedistiller.treedifferencing.operation.DeleteOperation;
@@ -294,7 +295,7 @@ public class TreeDifferencer {
     private int findPosition(Node node) {
         // 1. Let y = p(x) in T2
         // [and let w be the partner of x (x in T1)] makes no sense
-        // Node y = (Node) node.getParent();
+        Node y = (Node) node.getParent();
         /*
          * //2. if (node == y.getFirstChild() && node.isInOrder()) { return 0; }
          */
@@ -316,14 +317,34 @@ public class TreeDifferencer {
 
         // x is the n-th child of y that is marked "in order"
         if (v == null) {
+        	Node z = fRightToLeftMatchPrime.get(y);
+        	int insertPosition = -1;
+        	if (z.getChildCount() != 0) {
+        		SourceCodeEntity firstSuccessor = ((Node) z.getFirstChild()).getEntity();
+        		if (firstSuccessor != null) {
+        			insertPosition = firstSuccessor.getStartPosition();
+        		}
+        	} else {
+        		SourceCodeEntity parentEntity = z.getEntity();
+        		if (parentEntity != null) {
+        			insertPosition = parentEntity.getEndPosition();
+        		}
+        	}
+        	
+        	if (insertPosition != -1) {
+        		node.adjustSourceCodeRangeForInsertion(insertPosition);
+        	}
+           	
             return n;
         }
 
         // 4. Let u be the partner of v in T1 (*)
         Node u = fRightToLeftMatchPrime.get(v);
         if (u == null) {
-            System.out.println("ERROR: partner expected (findPosition)");
+            throw new IllegalStateException("ERROR: partner expected (findPosition)");
         }
+        
+        node.adjustSourceCodeRangeForInsertion(u.getEntity().getEndPosition() + 1);
 
         // 5. Suppose u is the ith child of its parent
         // (counting from left to right) that is marked "in order"
@@ -340,7 +361,7 @@ public class TreeDifferencer {
         return count + n + 1;
     }
 
-    private HashSet<NodePair> longestCommonSubsequence(List<Node> left, List<Node> right) {
+	private HashSet<NodePair> longestCommonSubsequence(List<Node> left, List<Node> right) {
         int m = left.size();
         int n = right.size();
 

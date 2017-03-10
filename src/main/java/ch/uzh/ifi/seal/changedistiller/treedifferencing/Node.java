@@ -27,6 +27,7 @@ import java.util.List;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import ch.uzh.ifi.seal.changedistiller.model.classifiers.EntityType;
+import ch.uzh.ifi.seal.changedistiller.model.classifiers.SourceRange;
 import ch.uzh.ifi.seal.changedistiller.model.entities.SourceCodeEntity;
 
 /**
@@ -250,4 +251,9 @@ public class Node extends DefaultMutableTreeNode {
         return candidate.isLeaf() && isNodeDescendant(candidate);
     }
 
+    public void adjustSourceCodeRangeForInsertion(int insertionPoint) {
+		SourceRange oldSourceRange = getEntity().getSourceRange();
+		oldSourceRange.setStart(insertionPoint);
+		oldSourceRange.setEnd(insertionPoint);
+	}
 }
