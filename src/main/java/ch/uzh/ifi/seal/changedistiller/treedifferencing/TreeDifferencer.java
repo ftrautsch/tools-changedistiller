@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.Set;
 
 import ch.uzh.ifi.seal.changedistiller.model.classifiers.EntityType;
-import ch.uzh.ifi.seal.changedistiller.model.entities.SourceCodeEntity;
 import ch.uzh.ifi.seal.changedistiller.treedifferencing.matching.MatchingFactory;
 import ch.uzh.ifi.seal.changedistiller.treedifferencing.matching.measure.TokenBasedCalculator;
 import ch.uzh.ifi.seal.changedistiller.treedifferencing.operation.DeleteOperation;
@@ -318,22 +317,10 @@ public class TreeDifferencer {
         // x is the n-th child of y that is marked "in order"
         if (v == null) {
         	Node z = fRightToLeftMatchPrime.get(y);
-        	int insertPosition = -1;
-        	if (z.getChildCount() != 0) {
-        		SourceCodeEntity firstSuccessor = ((Node) z.getFirstChild()).getEntity();
-        		if (firstSuccessor != null) {
-        			insertPosition = firstSuccessor.getStartPosition();
-        		}
-        	} else {
-        		SourceCodeEntity parentEntity = z.getEntity();
-        		if (parentEntity != null) {
-        			insertPosition = parentEntity.getEndPosition();
-        		}
-        	}
-        	
-        	if (insertPosition != -1) {
-        		node.adjustSourceCodeRangeForInsertion(insertPosition);
-        	}
+        	int insertPosition = z.getChildCount() != 0 
+        			? ((Node) z.getFirstChild()).getEntity().getStartPosition()
+        			: z.getEntity().getEndPosition();
+       		node.adjustSourceCodeRangeForInsertion(insertPosition);
            	
             return n;
         }

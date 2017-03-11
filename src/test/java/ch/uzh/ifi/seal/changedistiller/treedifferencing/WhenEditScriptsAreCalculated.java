@@ -31,9 +31,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import ch.uzh.ifi.seal.changedistiller.model.classifiers.java.JavaEntityType;
-import ch.uzh.ifi.seal.changedistiller.treedifferencing.Node;
-import ch.uzh.ifi.seal.changedistiller.treedifferencing.TreeDifferencer;
-import ch.uzh.ifi.seal.changedistiller.treedifferencing.TreeEditOperation;
 import ch.uzh.ifi.seal.changedistiller.treedifferencing.TreeEditOperation.OperationType;
 import ch.uzh.ifi.seal.changedistiller.treedifferencing.operation.DeleteOperation;
 import ch.uzh.ifi.seal.changedistiller.treedifferencing.operation.InsertOperation;
@@ -48,8 +45,7 @@ public class WhenEditScriptsAreCalculated extends TreeDifferencingTestCase {
     @Before
     @Override
     public void setup() throws Exception {
-        fRootLeft = new Node(JavaEntityType.ROOT_NODE, "method()");
-        fRootRight = new Node(JavaEntityType.ROOT_NODE, "method()");
+        super.setup();
         fDifferencer = new TreeDifferencer();
     }
 
