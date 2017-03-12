@@ -179,8 +179,8 @@ public class JavaDeclarationConverter extends ASTVisitor {
     // logic partly taken from org.eclipse.jdt.core.dom.ASTConverter
     private void visitModifiers(int modifierMask) {
         push(JavaEntityType.MODIFIERS, "", -1, -1);
+        Node modifiers = fNodeStack.peek();
         if (modifierMask != 0) {
-            Node modifiers = fNodeStack.peek();
             fScanner.tokenizeWhiteSpace = false;
             try {
                 int token;
@@ -212,19 +212,28 @@ public class JavaDeclarationConverter extends ASTVisitor {
             } catch (InvalidInputException e) {
                 // CHECKSTYLE:ON
                 // ignore
-            }
-            setSourceRange(modifiers);
+            }          
+            inferSourceRangeFromLeafs(modifiers);
+        } else {
+        	inferSourceRangeFromParent(modifiers);
         }
+       
         pop();
     }
 
-    private void setSourceRange(Node modifiers) {
+	private void inferSourceRangeFromLeafs(Node modifiers) {
         SourceCodeEntity firstModifier = ((Node) modifiers.getFirstLeaf()).getEntity();
         SourceCodeEntity lastModifier = ((Node) modifiers.getLastLeaf()).getEntity();
         modifiers.getEntity().setStartPosition(firstModifier.getStartPosition());
         modifiers.getEntity().setEndPosition(lastModifier.getEndPosition());
     }
 
+	private void inferSourceRangeFromParent(Node modifiers) {
+		SourceCodeEntity parentEntity = ((Node) modifiers.getParent()).getEntity();
+		modifiers.getEntity().setStartPosition(parentEntity.getStartPosition());
+		modifiers.getEntity().setEndPosition(parentEntity.getStartPosition());
+	}
+	
     @Override
     public boolean visit(Javadoc javadoc, ClassScope scope) {
         return visit(javadoc, (BlockScope) null);
