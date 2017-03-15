@@ -152,7 +152,7 @@ public class TreeDifferencer {
                 }
                 if (!equals) {
                     // A. Append UPD(w, v(x)) to E
-                    TreeEditOperation update = new UpdateOperation(w, x, v(x));
+                    TreeEditOperation update = new UpdateOperation(w, x);
                     fEditScript.add(update);
                     // B. Apply UPD(w, v(x)) to T1
                     update.apply();

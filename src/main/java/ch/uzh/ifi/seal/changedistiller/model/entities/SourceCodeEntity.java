@@ -47,7 +47,8 @@ public class SourceCodeEntity {
     private EntityType fType;
     private int fModifiers;
     private List<SourceCodeEntity> fAssociatedEntities;
-    private SourceRange fRange;
+    private SourceRange fRange;    
+    private String fContent;
 
     /**
      * Constructor to initialize a source code entity with a unique name and a type.
@@ -60,11 +61,27 @@ public class SourceCodeEntity {
      *            the range
      */
     public SourceCodeEntity(String uniqueName, EntityType type, SourceRange range) {
-        this(uniqueName, type, 0, range);
+        this(uniqueName, type, 0, range, uniqueName);
+    }
+    
+    /**
+     * Constructor to initialize a source code entity with a unique name, a type, and a content.
+     * 
+     * @param uniqueName
+     *            the name
+     * @param type
+     *            the type
+     * @param range
+     *            the range
+     * @param content
+     *            the content
+     */
+    public SourceCodeEntity(String uniqueName, EntityType type, SourceRange range, String content) {
+        this(uniqueName, type, 0, range, content);
     }
 
     /**
-     * Constructor to initialize a source code entity with a unique name, a name, a type, and modifiers.
+     * Constructor to initialize a source code entity with a unique name, a name, a type, modifiers, and a content.
      * 
      * @param uniqueName
      *            the unique name
@@ -74,12 +91,15 @@ public class SourceCodeEntity {
      *            the modifiers
      * @param range
      *            the range
+     * @param content
+     *            the content
      */
-    public SourceCodeEntity(String uniqueName, EntityType type, int modifiers, SourceRange range) {
+    public SourceCodeEntity(String uniqueName, EntityType type, int modifiers, SourceRange range, String content) {
         setUniqueName(uniqueName);
         setType(type);
         setModifiers(modifiers);
         setSourceRange(range);
+        setContent(content);
         setAssociatedEntities(new LinkedList<SourceCodeEntity>());
     }
 
@@ -105,6 +125,14 @@ public class SourceCodeEntity {
 
     public final void setModifiers(int modifiers) {
         fModifiers = modifiers;
+    }
+    
+    public String getContent() {
+        return fContent;
+    }
+
+    public final void setContent(String content) {
+    	fContent = content;
     }
 
     /**

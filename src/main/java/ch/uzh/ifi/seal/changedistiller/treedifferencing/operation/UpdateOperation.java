@@ -32,8 +32,6 @@ import ch.uzh.ifi.seal.changedistiller.treedifferencing.TreeEditOperation;
 public class UpdateOperation implements TreeEditOperation {
 
     private Node fNodeToUpdate;
-    private String fValue;
-    private String fOldValue;
     private boolean fApplied;
     private Node fNewNode;
 
@@ -44,15 +42,11 @@ public class UpdateOperation implements TreeEditOperation {
      *            the node to update
      * @param newNode
      *            the node the updated node becomes
-     * @param value
-     *            the new value of the node to be updated
      */
-    public UpdateOperation(Node nodeToUpdate, Node newNode, String value) {
+    public UpdateOperation(Node nodeToUpdate, Node newNode) {
         fNodeToUpdate = nodeToUpdate;
         fNewNode = newNode;
-        fOldValue = fNodeToUpdate.getValue();
         // fNodeToUpdate.getEntity().setUniqueName(value);
-        fValue = value;
     }
 
     @Override
@@ -64,7 +58,7 @@ public class UpdateOperation implements TreeEditOperation {
     }
 
     public String getOldValue() {
-        return fOldValue;
+        return fNodeToUpdate.getValue();
     }
 
     public Node getNodeToUpdate() {
@@ -74,6 +68,10 @@ public class UpdateOperation implements TreeEditOperation {
     @Override
     public OperationType getOperationType() {
         return OperationType.UPDATE;
+    }
+    
+    public String getNewValue() {
+        return fNewNode.getValue();
     }
 
     public Node getNewNode() {
@@ -85,9 +83,9 @@ public class UpdateOperation implements TreeEditOperation {
         StringBuilder sb = new StringBuilder();
         sb.append("--Update operation--\n");
         sb.append("Node value to update: ");
-        sb.append(fOldValue);
+        sb.append(fNodeToUpdate.getValue());
         sb.append("\nwith value: ");
-        sb.append(fValue);
+        sb.append(fNewNode.getValue());
         return sb.toString();
     }
 }

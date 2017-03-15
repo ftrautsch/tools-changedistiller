@@ -171,7 +171,8 @@ public class JavaASTHelper implements ASTHelper<JavaStructureNode> {
                 node.getFullyQualifiedName(),
                 convertType(node),
                 extractModifier(node.getASTNode()),
-                createSourceRange(node.getASTNode()));
+                createSourceRange(node.getASTNode()),
+                node.getContent());
     }
 
     private SourceRange createSourceRange(ASTNode astNode) {

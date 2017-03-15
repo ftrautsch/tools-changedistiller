@@ -216,8 +216,12 @@ public class ClassDistiller {
 
     private void processChanges(StructureDiffNode diffNode) {
         if (diffNode.isAddition()) {
-            Insert insert =
-                    new Insert(fRootEntity, fRightASTHelper.createSourceCodeEntity(diffNode.getRight()), fParentEntity);
+       		SourceCodeEntity entityToInsert = fRightASTHelper.createSourceCodeEntity(diffNode.getRight());
+       		int entityLength = entityToInsert.getEndPosition() - entityToInsert.getStartPosition();
+       		entityToInsert.setStartPosition(fParentEntity.getEndPosition());
+       		entityToInsert.setEndPosition(entityToInsert.getStartPosition() + entityLength);
+  
+       		Insert insert = new Insert(fRootEntity, entityToInsert, fParentEntity);
             fRefactoringContainer.addCandidate(new RefactoringCandidate(insert, diffNode));
         } else if (diffNode.isDeletion()) {
             Delete delete =

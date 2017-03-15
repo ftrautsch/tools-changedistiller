@@ -104,9 +104,11 @@ public class SourceCodeChangeFactory {
     public Update createUpdateOperation(StructureEntityVersion structureEntity, UpdateOperation update) {
         if (isUsableForChangeExtraction(update.getNodeToUpdate())) {
             SourceCodeEntity entity =
-                    new SourceCodeEntity(update.getOldValue(), update.getNodeToUpdate().getEntity().getType(), update
-                            .getNodeToUpdate().getEntity().getModifiers(), update.getNodeToUpdate().getEntity()
-                            .getSourceRange());
+                    new SourceCodeEntity(update.getOldValue(), 
+                    		update.getNodeToUpdate().getEntity().getType(), 
+                    		update.getNodeToUpdate().getEntity().getModifiers(), 
+                    		update.getNodeToUpdate().getEntity().getSourceRange(), 
+                    		update.getNewNode().getValue());
             return new Update(structureEntity, entity, update.getNewNode().getEntity(), ((Node) update
                     .getNodeToUpdate().getParent()).getEntity());
         }

@@ -110,7 +110,7 @@ public class JavaDeclarationConverter extends ASTVisitor {
     @Override
     public boolean visit(Argument node, BlockScope scope) {
         boolean isNotParam = getCurrentParent().getLabel() != JavaEntityType.PARAMETERS;
-        pushValuedNode(node, String.valueOf(node.name));
+        pushValuedNode(node, String.valueOf(node.name), node.toString());
         if (isNotParam) {
             visitModifiers(node.modifiers);
         }
@@ -251,7 +251,7 @@ public class JavaDeclarationConverter extends ASTVisitor {
         if (isJavadocEmpty(string)) {
             fEmptyJavaDoc = true;
         } else {
-            pushValuedNode(javadoc, string);
+            pushValuedNode(javadoc, string, string);
         }
         return false;
     }
@@ -344,7 +344,8 @@ public class JavaDeclarationConverter extends ASTVisitor {
     public boolean visit(ParameterizedSingleTypeReference type, BlockScope scope) {
         int start = type.sourceStart();
         int end = findSourceEndTypeReference(type, type.typeArguments);
-        pushValuedNode(type, prefixWithNameOfParrentIfInMethodDeclaration() + getSource(start, end));
+        String source = getSource(start, end);
+        pushValuedNode(type, prefixWithNameOfParrentIfInMethodDeclaration() + source, source);
         fNodeStack.peek().getEntity().setEndPosition(end);
         return false;
     }
@@ -378,7 +379,7 @@ public class JavaDeclarationConverter extends ASTVisitor {
 
     @Override
     public boolean visit(ParameterizedQualifiedTypeReference type, BlockScope scope) {
-        pushValuedNode(type, getSource(type));
+        pushValuedNode(type, getSource(type), getSource(type));
         adjustEndPositionOfParameterizedType(type);
         return false;
     }
@@ -411,7 +412,7 @@ public class JavaDeclarationConverter extends ASTVisitor {
 
     @Override
     public boolean visit(QualifiedTypeReference type, BlockScope scope) {
-        pushValuedNode(type, prefixWithNameOfParrentIfInMethodDeclaration() + type.toString());
+        pushValuedNode(type, prefixWithNameOfParrentIfInMethodDeclaration() + type.toString(), type.toString());
         return false;
     }
 
@@ -442,7 +443,7 @@ public class JavaDeclarationConverter extends ASTVisitor {
 
     @Override
     public boolean visit(SingleTypeReference type, BlockScope scope) {
-        pushValuedNode(type, prefixWithNameOfParrentIfInMethodDeclaration() + String.valueOf(type.token));
+        pushValuedNode(type, prefixWithNameOfParrentIfInMethodDeclaration() + String.valueOf(type.token), type.toString());
         return false;
     }
 
@@ -453,7 +454,7 @@ public class JavaDeclarationConverter extends ASTVisitor {
 
     @Override
 	public boolean visit(ArrayTypeReference arrayType, BlockScope scope) {
-    	pushValuedNode(arrayType, prefixWithNameOfParrentIfInMethodDeclaration() + String.valueOf(arrayType.token));
+    	pushValuedNode(arrayType, prefixWithNameOfParrentIfInMethodDeclaration() + String.valueOf(arrayType.token), arrayType.toString());
 		return false;
 	}
     
@@ -548,7 +549,7 @@ public class JavaDeclarationConverter extends ASTVisitor {
                 break;
             default:
         }
-        pushValuedNode(type, bound);
+        pushValuedNode(type, bound, bound);
         return true;
     }
 
@@ -627,13 +628,17 @@ public class JavaDeclarationConverter extends ASTVisitor {
         return (Node) fNodeStack.peek().getLastChild();
     }
 
-    private void pushValuedNode(ASTNode node, String value) {
-        push(fASTHelper.convertNode(node), value, node.sourceStart(), node.sourceEnd());
+    private void pushValuedNode(ASTNode node, String value, String content) {
+        push(fASTHelper.convertNode(node), value, node.sourceStart(), node.sourceEnd(), content);
     }
-
+    
     private void push(EntityType label, String value, int start, int end) {
+    	push(label, value, start, end, value);
+    }
+    
+    private void push(EntityType label, String value, int start, int end, String content) {
         Node n = new Node(label, value.trim());
-        n.setEntity(new SourceCodeEntity(value.trim(), label, new SourceRange(start, end)));
+        n.setEntity(new SourceCodeEntity(value.trim(), label, new SourceRange(start, end), content));
         getCurrentParent().add(n);
         fNodeStack.push(n);
     }
