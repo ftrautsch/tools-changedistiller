@@ -35,3 +35,10 @@ You can include changedistiller in the following way in your maven pom:
 </dependency>
 ```
 
+For Gradle users:
+```groovy
+dependencies {
+    compile group: 'ch.uzh.ifi.seal', name: 'changedistiller', version: '0.0.1-SNAPSHOT'
+}
+```
+
