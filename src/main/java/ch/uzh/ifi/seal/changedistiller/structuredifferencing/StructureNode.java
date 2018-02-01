@@ -26,7 +26,7 @@ import java.util.List;
  * Node for structure differencing.
  * 
  * @author Beat Fluri
- * @see ch.uzh.ifi.seal.changedistiller.structuredifferencing.WhenStructureDifferencesAreExtracted
+ * @see ch.uzh.ifi.seal.changedistiller.structuredifferencing.StructureDiffNode
  */
 public interface StructureNode {
 

@@ -28,6 +28,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import java.io.File;
 import java.util.List;
 
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -43,8 +44,8 @@ public class WhenFilesAreDistilled {
     private static final String TEST_DATA = "src_change/";
     private static FileDistiller distiller;
 
-    @BeforeClass
-    public static void initialize() {
+    @Before
+    public void initialize() {
         distiller = ChangeDistiller.createFileDistiller(Language.JAVA);
     }
 
@@ -64,6 +65,30 @@ public class WhenFilesAreDistilled {
         File right = CompilationUtils.getFile(TEST_DATA + "TestRight.java");
         distiller.extractClassifiedSourceCodeChanges(left, right);
         assertThat(distiller.getSourceCodeChanges().size(), is(23));
+    }
+
+    @Test
+    public void changedFilesShouldProduceSourceCodeChanges2() throws Exception {
+        File left = CompilationUtils.getFile(TEST_DATA + "HikariConfigLeft.java");
+        File right = CompilationUtils.getFile(TEST_DATA + "HikariConfigRight.java");
+        distiller.extractClassifiedSourceCodeChanges(left, right);
+        assertThat(distiller.getSourceCodeChanges().size(), is(78));
+    }
+
+    @Test
+    public void changedFilesShouldProduceSourceCodeChanges3() throws Exception {
+        File left = CompilationUtils.getFile(TEST_DATA + "HikariPoolLeft.java");
+        File right = CompilationUtils.getFile(TEST_DATA + "HikariPoolRight.java");
+        distiller.extractClassifiedSourceCodeChanges(left, right);
+        assertThat(distiller.getSourceCodeChanges().size(), is(11));
+    }
+
+    @Test
+    public void changedFilesShouldProduceSourceCodeChanges4() throws Exception {
+        File left = CompilationUtils.getFile(TEST_DATA + "ProxyConnectionRight.java");
+        File right = CompilationUtils.getFile(TEST_DATA + "ProxyConnectionLeft.java");
+        distiller.extractClassifiedSourceCodeChanges(left, right);
+        assertThat(distiller.getSourceCodeChanges().size(), is(0));
     }
 
     @Test

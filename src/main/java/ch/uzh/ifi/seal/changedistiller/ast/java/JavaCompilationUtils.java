@@ -51,8 +51,10 @@ public final class JavaCompilationUtils {
     /**
      * Returns the compiled source as a {@link JavaCompilation}.
      * 
-     * @param Java source
-     *            to compile
+     * @param source
+     *      to compile
+     * @param fileName
+     *      name of file to compile
      * @return the compilation of the Java source
      * @throws InvalidSyntaxException if the file has syntax errors.
      */

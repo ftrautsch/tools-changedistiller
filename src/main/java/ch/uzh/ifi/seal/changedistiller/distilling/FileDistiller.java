@@ -85,7 +85,7 @@ public class FileDistiller {
      * 			  version of the language in the left file
      * @param right
      *            file to extract changes
-     * @param leftVersion
+     * @param rightVersion
      * 			  version of the language in the right file
      */
     @SuppressWarnings("unchecked")
